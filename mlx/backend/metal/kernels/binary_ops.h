@@ -219,7 +219,7 @@ struct NotEqual {
 struct Power {
   template <typename T>
   metal::enable_if_t<!metal::is_integral_v<T>, T> operator()(T base, T exp) {
-    return metal::pow(base, exp);
+    return static_cast<T>(metal::pow(base, exp));
   }
 
   template <typename T>

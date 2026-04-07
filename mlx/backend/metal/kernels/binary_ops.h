@@ -21,15 +21,15 @@ struct FloorDivide {
   }
   template <>
   float operator()(float x, float y) {
-    return trunc(x / y);
+    return static_cast<decltype(x)>(trunc(x / y));
   }
   template <>
   half operator()(half x, half y) {
-    return trunc(x / y);
+    return static_cast<decltype(x)>(trunc(x / y));
   }
   template <>
   bfloat16_t operator()(bfloat16_t x, bfloat16_t y) {
-    return trunc(x / y);
+    return static_cast<decltype(x)>(trunc(x / y));
   }
 };
 

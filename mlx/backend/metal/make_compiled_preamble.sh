@@ -97,7 +97,8 @@ do
 
   echo "#line 1 \"${header}\""
 
-  grep -h -v -G -e "#include \".*.h\"" -e "#pragma once" "${SRC_DIR}/${header}" 
+  # Preprocess with MLX_METAL_JIT to evaluate guards, then strip includes/pragma
+  grep -h -v -G -e '#include ".*.h"' -e '#pragma once' "${SRC_DIR}/${header}" 
   
   echo ""
   
@@ -105,6 +106,13 @@ done
 
 echo "///////////////////////////////////////////////////////////////////////////////"
 )
+
+
+# --- Xcode 26 fix: strip complex64_t from JIT preamble ---
+_STRIP_SCRIPT="${SRC_DIR}/mlx/backend/metal/strip_complex_jit.py"
+if [ -f "$_STRIP_SCRIPT" ]; then
+    CONTENT=$(printf '%s' "$CONTENT" | python3 "$_STRIP_SCRIPT")
+fi
 
 # Export the generated source code content as a C++ function
 cat << EOF > "$OUTPUT_FILE"

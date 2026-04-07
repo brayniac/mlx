@@ -17,7 +17,7 @@ constant float inf = metal::numeric_limits<float>::infinity();
 struct Abs {
   template <typename T>
   T operator()(T x) {
-    return metal::abs(x);
+    return static_cast<T>(metal::abs(static_cast<float>(x)));
   };
   uint8_t operator()(uint8_t x) {
     return x;
@@ -42,7 +42,7 @@ struct Abs {
 struct ArcCos {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::acos(x);
+    return static_cast<T>(metal::precise::acos(x));
   };
 
   complex64_t operator()(complex64_t x);
@@ -51,14 +51,14 @@ struct ArcCos {
 struct ArcCosh {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::acosh(x);
+    return static_cast<T>(metal::precise::acosh(x));
   };
 };
 
 struct ArcSin {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::asin(x);
+    return static_cast<T>(metal::precise::asin(x));
   };
 
   complex64_t operator()(complex64_t x);
@@ -67,14 +67,14 @@ struct ArcSin {
 struct ArcSinh {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::asinh(x);
+    return static_cast<T>(metal::precise::asinh(x));
   };
 };
 
 struct ArcTan {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::atan(x);
+    return static_cast<T>(metal::precise::atan(x));
   };
 
   complex64_t operator()(complex64_t x);
@@ -83,7 +83,7 @@ struct ArcTan {
 struct ArcTanh {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::atanh(x);
+    return static_cast<T>(metal::precise::atanh(x));
   };
 };
 
@@ -97,7 +97,7 @@ struct BitwiseInvert {
 struct Ceil {
   template <typename T>
   T operator()(T x) {
-    return metal::ceil(x);
+    return static_cast<T>(metal::ceil(x));
   };
   int8_t operator()(int8_t x) {
     return x;
@@ -131,7 +131,7 @@ struct Ceil {
 struct Cos {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::cos(x);
+    return static_cast<T>(metal::precise::cos(x));
   };
 
   complex64_t operator()(complex64_t x) {
@@ -144,7 +144,7 @@ struct Cos {
 struct Cosh {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::cosh(x);
+    return static_cast<T>(metal::precise::cosh(x));
   };
 
   complex64_t operator()(complex64_t x) {
@@ -177,7 +177,7 @@ struct ErfInv {
 struct Exp {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::exp(x);
+    return static_cast<T>(metal::precise::exp(x));
   };
   complex64_t operator()(complex64_t x) {
     return cexpf(x);
@@ -194,7 +194,7 @@ struct Expm1 {
 struct Floor {
   template <typename T>
   T operator()(T x) {
-    return metal::floor(x);
+    return static_cast<T>(metal::floor(x));
   };
   int8_t operator()(int8_t x) {
     return x;
@@ -234,7 +234,7 @@ struct Imag {
 struct Log {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::log(x);
+    return static_cast<T>(metal::precise::log(x));
   };
 
   complex64_t operator()(complex64_t x) {
@@ -298,7 +298,7 @@ struct Real {
 struct Round {
   template <typename T>
   T operator()(T x) {
-    return metal::rint(x);
+    return static_cast<T>(metal::rint(x));
   };
   complex64_t operator()(complex64_t x) {
     return {metal::rint(x.real), metal::rint(x.imag)};
@@ -308,8 +308,8 @@ struct Round {
 struct Sigmoid {
   template <typename T>
   T operator()(T x) {
-    auto y = 1 / (1 + metal::exp(metal::abs(x)));
-    return (x < 0) ? y : 1 - y;
+    auto y = 1 / (1 + metal::exp(static_cast<T>(metal::abs(static_cast<float>(x)))));
+    return static_cast<T>((x < 0) ? y : 1 - y);
   }
 };
 
@@ -333,7 +333,7 @@ struct Sign {
 struct Sin {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::sin(x);
+    return static_cast<T>(metal::precise::sin(x));
   };
 
   complex64_t operator()(complex64_t x) {
@@ -346,7 +346,7 @@ struct Sin {
 struct Sinh {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::sinh(x);
+    return static_cast<T>(metal::precise::sinh(x));
   };
 
   complex64_t operator()(complex64_t x) {
@@ -366,7 +366,7 @@ struct Square {
 struct Sqrt {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::sqrt(x);
+    return static_cast<T>(metal::precise::sqrt(x));
   };
 
   complex64_t operator()(complex64_t x) {
@@ -384,7 +384,7 @@ struct Sqrt {
 struct Rsqrt {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::rsqrt(x);
+    return static_cast<T>(metal::precise::rsqrt(x));
   };
 
   complex64_t operator()(complex64_t x) {
@@ -395,7 +395,7 @@ struct Rsqrt {
 struct Tan {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::tan(x);
+    return static_cast<T>(metal::precise::tan(x));
   };
 
   complex64_t operator()(complex64_t x) {
@@ -410,7 +410,7 @@ struct Tan {
 struct Tanh {
   template <typename T>
   T operator()(T x) {
-    return metal::precise::tanh(x);
+    return static_cast<T>(metal::precise::tanh(x));
   };
 
   complex64_t operator()(complex64_t x) {

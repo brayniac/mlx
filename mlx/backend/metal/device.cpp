@@ -557,6 +557,14 @@ MTL::Library* Device::build_library_(const std::string& source_string) {
     if (error) {
       msg << error->localizedDescription()->utf8String() << "\n";
     }
+    // Dump failing source for debugging
+    {
+      auto dump = fopen("/tmp/mlx_failed_kernel.metal", "w");
+      if (dump) {
+        fprintf(dump, "%s", source_string.c_str());
+        fclose(dump);
+      }
+    }
     throw std::runtime_error(msg.str());
   }
 

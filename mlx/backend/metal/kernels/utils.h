@@ -75,6 +75,7 @@ struct Limits<bool> {
   static constexpr constant bool min = false;
 };
 
+#if !defined(MLX_METAL_JIT)
 template <>
 struct Limits<complex64_t> {
   static constexpr constant complex64_t max = complex64_t(
@@ -84,6 +85,7 @@ struct Limits<complex64_t> {
       -metal::numeric_limits<float>::infinity(),
       -metal::numeric_limits<float>::infinity());
 };
+#endif // !MLX_METAL_JIT
 
 ///////////////////////////////////////////////////////////////////////////////
 // Indexing utils
@@ -333,6 +335,7 @@ inline bfloat16_t log1p(bfloat16_t x) {
   return bfloat16_t(x * (metal::log(xp1) / (xp1 - 1.0f)));
 }
 
+#if !defined(MLX_METAL_JIT)
 inline complex64_t log1p(complex64_t in) {
   float x = in.real;
   float y = in.imag;
@@ -349,6 +352,7 @@ inline complex64_t log1p(complex64_t in) {
     return {metal::log(z0), theta};
   }
 }
+#endif // !MLX_METAL_JIT
 
 ///////////////////////////////////////////////////////////////////////////////
 // SIMD shuffle ops
@@ -368,10 +372,12 @@ inline bool simd_shuffle_down(bool data, uint16_t delta) {
   return simd_shuffle_down(static_cast<uint32_t>(data), delta);
 }
 
+#if !defined(MLX_METAL_JIT)
 inline complex64_t simd_shuffle_down(complex64_t data, uint16_t delta) {
   return complex64_t(
       simd_shuffle_down(data.real, delta), simd_shuffle_down(data.imag, delta));
 }
+#endif // !MLX_METAL_JIT
 
 inline uint64_t simd_shuffle_up(uint64_t data, uint16_t delta) {
   return as_type<uint64_t>(metal::simd_shuffle_up(as_type<uint2>(data), delta));
@@ -385,10 +391,12 @@ inline bool simd_shuffle_up(bool data, uint16_t delta) {
   return simd_shuffle_up(static_cast<uint32_t>(data), delta);
 }
 
+#if !defined(MLX_METAL_JIT)
 inline complex64_t simd_shuffle_up(complex64_t data, uint16_t delta) {
   return complex64_t(
       simd_shuffle_up(data.real, delta), simd_shuffle_up(data.imag, delta));
 }
+#endif // !MLX_METAL_JIT
 
 inline uint64_t
 simd_shuffle_and_fill_up(uint64_t data, uint64_t filling, uint16_t delta) {
@@ -407,6 +415,7 @@ inline bool simd_shuffle_and_fill_up(bool data, bool filling, uint16_t delta) {
       static_cast<uint32_t>(data), static_cast<uint32_t>(filling), delta);
 }
 
+#if !defined(MLX_METAL_JIT)
 inline complex64_t simd_shuffle_and_fill_up(
     complex64_t data,
     complex64_t filling,
@@ -415,6 +424,7 @@ inline complex64_t simd_shuffle_and_fill_up(
       simd_shuffle_and_fill_up(data.real, filling.real, delta),
       simd_shuffle_and_fill_up(data.imag, filling.imag, delta));
 }
+#endif // !MLX_METAL_JIT
 
 inline uint64_t simd_shuffle(uint64_t data, uint16_t lane) {
   return as_type<uint64_t>(metal::simd_shuffle(as_type<uint2>(data), lane));
@@ -428,10 +438,12 @@ inline bool simd_shuffle(bool data, uint16_t lane) {
   return simd_shuffle(static_cast<uint32_t>(data), lane);
 }
 
+#if !defined(MLX_METAL_JIT)
 inline complex64_t simd_shuffle(complex64_t data, uint16_t lane) {
   return complex64_t(
       simd_shuffle(data.real, lane), simd_shuffle(data.imag, lane));
 }
+#endif // !MLX_METAL_JIT
 
 // std::conditional is not included with Metal
 template <bool condition, typename T, typename U>

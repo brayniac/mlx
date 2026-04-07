@@ -2,6 +2,11 @@
 
 #pragma once
 
+// Xcode 26 Metal compiler rejects address-space qualifiers on member
+// functions and requires explicit address spaces on references. Since JIT
+// kernels never use complex numbers, skip this entire header in JIT mode.
+#if !defined(MLX_METAL_JIT)
+
 #include <metal_stdlib>
 
 using namespace metal;
@@ -171,3 +176,5 @@ constexpr complex64_t operator%(complex64_t a, complex64_t b) {
   }
   return {real, imag};
 }
+
+#endif // !MLX_METAL_JIT
